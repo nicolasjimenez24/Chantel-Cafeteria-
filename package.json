@@ -1,0 +1,26 @@
+{
+  "name": "cafeteria",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build:core": "npm run build -w @pasteleria/core",
+    "dev:frontend": "npm run dev -w @pasteleria/frontend",
+    "dev:backend": "npm run start:dev -w @pasteleria/backend",
+    "start": "npm run start:prod -w @pasteleria/backend",
+    "build": "npm run build:core && npm run build -w @pasteleria/frontend && npm run build -w @pasteleria/backend",
+    "test": "npm run test -w @pasteleria/core",
+    "db:up": "docker compose up -d",
+    "db:migrate": "npm run prisma:migrate -w @pasteleria/backend",
+    "db:deploy": "npm run prisma:deploy -w @pasteleria/backend",
+    "db:seed": "npm run prisma:seed -w @pasteleria/backend"
+  },
+  "allowScripts": {
+    "prisma@6.19.3": true,
+    "@prisma/client@6.19.3": true,
+    "@prisma/engines@6.19.3": true
+  }
+}

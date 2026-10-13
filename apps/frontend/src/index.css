@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* ── Fuentes incluidas en la aplicación (funcionan sin internet) ── */
+
+@font-face { font-family: "Jost"; font-weight: 400; font-display: swap; src: url("./assets/fonts/jost-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Jost"; font-weight: 500; font-display: swap; src: url("./assets/fonts/jost-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Jost"; font-weight: 600; font-display: swap; src: url("./assets/fonts/jost-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Jost"; font-weight: 700; font-display: swap; src: url("./assets/fonts/jost-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Serif Display"; font-weight: 400; font-display: swap; src: url("./assets/fonts/dm-serif-display-latin-400-normal.woff2") format("woff2"); }
+
+@theme {
+  /* Superficies */
+  --color-paper: #FBF9FC;
+  --color-panel: #FFFFFF;
+  --color-panel-alt: #F8F3F9;
+
+  /* Marca */
+  --color-plum: #4B2348;
+  --color-plum-deep: #36172F;
+  --color-lilac: #E6D3EE;
+  --color-lilac-deep: #D5BCE2;
+  --color-mint: #5DB873;
+  --color-forest: #0F2E22;
+  --color-butter: #FFF1C9;
+
+  /* Texto */
+  --color-ink: #2A1A2A;
+  --color-ink-soft: #5B465A;
+  --color-muted: #7D6A7C;
+  --color-line: #EDE4EF;
+  --color-line-strong: #DCCBE0;
+
+  /* Nombres heredados que usan los componentes, ahora en la paleta nueva */
+  --color-espresso: #4B2348;
+  --color-espresso-soft: #6A3A66;
+  --color-cream: #F6EEF8;
+  --color-framboise: #4B2348;
+  --color-framboise-deep: #36172F;
+  --color-framboise-10: #4B234812;
+  --color-copper: #C99A1E;
+  --color-copper-10: #FFF1C9;
+
+  /* Categorías */
+  --color-berry: #B03A64;
+  --color-berry-10: #B03A6414;
+  --color-caramel: #A8731F;
+  --color-caramel-10: #A8731F17;
+  --color-cocoa: #7A4E3A;
+  --color-cocoa-10: #7A4E3A14;
+  --color-pistachio: #2F8A55;
+  --color-pistachio-10: #2F8A5514;
+
+  --font-display: "DM Serif Display", "Georgia", serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+}
+
+html { background: var(--color-paper); }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.005em; }
+.font-mono-num { font-family: var(--font-sans); font-variant-numeric: tabular-nums lining-nums; }
+
+/* ── Botones ────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 3rem;
+  padding: 0 1.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 0;
+  transition: background-color .18s ease, color .18s ease, transform .08s ease;
+}
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn:not(:disabled):active { transform: translateY(1px); }
+
+/* Principal: etiqueta de pastelería, esquinas recortadas hacia adentro */
+.btn-primary {
+  --corte: 9px;
+  background: var(--color-plum);
+  color: #fff;
+  border-radius: 6px;
+  -webkit-mask:
+    radial-gradient(circle var(--corte) at 0 0, #0000 98%, #000) 0 0,
+    radial-gradient(circle var(--corte) at 100% 0, #0000 98%, #000) 100% 0,
+    radial-gradient(circle var(--corte) at 0 100%, #0000 98%, #000) 0 100%,
+    radial-gradient(circle var(--corte) at 100% 100%, #0000 98%, #000) 100% 100%;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask:
+    radial-gradient(circle var(--corte) at 0 0, #0000 98%, #000) 0 0,
+    radial-gradient(circle var(--corte) at 100% 0, #0000 98%, #000) 100% 0,
+    radial-gradient(circle var(--corte) at 0 100%, #0000 98%, #000) 0 100%,
+    radial-gradient(circle var(--corte) at 100% 100%, #0000 98%, #000) 100% 100%;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+.btn-primary:not(:disabled):hover { background: var(--color-plum-deep); }
+/* La máscara recorta el contorno de foco: se marca por dentro */
+.btn-primary:focus-visible { outline: none; box-shadow: inset 0 0 0 3px var(--color-lilac); }
+
+/* Secundario: píldora lila */
+.btn-secondary {
+  background: var(--color-lilac);
+  color: var(--color-plum);
+  border-radius: 999px;
+}
+.btn-secondary:not(:disabled):hover { background: var(--color-lilac-deep); }
+
+/* Discreto */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-plum);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1.5px var(--color-line-strong);
+}
+.btn-ghost:not(:disabled):hover { background: var(--color-panel-alt); box-shadow: inset 0 0 0 1.5px var(--color-plum); }
+
+.btn-sm { height: 2.375rem; padding: 0 1.125rem; font-size: .75rem; }
+.btn-primary.btn-sm { --corte: 7px; }
+
+/* ── Superficies ────────────────────────────────────────────── */
+
+.card {
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(42, 26, 42, .04), 0 10px 24px -20px rgba(75, 35, 72, .25);
+}
+
+.field {
+  height: 2.125rem;
+  padding-block: 0;
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: 10px;
+  background: var(--color-panel);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: .875rem;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.field:focus { border-color: var(--color-plum); box-shadow: 0 0 0 3px var(--color-lilac); outline: none; }
+
+.thead-row { background: var(--color-panel-alt); color: var(--color-muted); font-size: .78rem; font-weight: 600; }
+
+/* ── Franja de título de cada sección ───────────────────────── */
+
+.hero { position: relative; overflow: hidden; }
+.hero-menta { background: var(--color-mint); --mancha: #DCD6E6; }
+.hero-lila { background: #C9AEDA; --mancha: #F6EFF8; }
+.hero-mantequilla { background: #F0CF6E; --mancha: #FFF8E3; }
+.hero-rosa { background: #E8A2B6; --mancha: #FCEBF0; }
+
+/* Forma orgánica detrás del título, como los banners de pastelería */
+.hero-mancha {
+  background: var(--mancha);
+  /* Rectángulo de bordes blandos e irregulares, como glaseado: no un óvalo */
+  border-radius: 44px 72px 52px 80px / 60px 46px 70px 52px;
+}
+
+/* ── Accesibilidad ──────────────────────────────────────────── */
+
+input[type=checkbox], input[type=radio] { accent-color: var(--color-plum); }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+
+:focus-visible { outline: 2.5px solid var(--color-plum); outline-offset: 2px; }
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+}

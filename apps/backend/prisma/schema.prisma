@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Insumo {
+  id         String   @id
+  nombre     String
+  unidad     String   @default("g")
+  costoPorKg Float?
+  creadoEn   DateTime @default(now())
+
+  recetaItems RecetaItem[]
+  bodega      BodegaInsumo?
+
+  @@map("insumos")
+}
+
+model Producto {
+  id        String   @id
+  nombre    String
+  categoria String
+  activo    Boolean  @default(true)
+  creadoEn  DateTime @default(now())
+
+  ingredientes RecetaItem[]
+
+  @@map("productos")
+}
+
+model RecetaItem {
+  productoId     String
+  insumoId       String
+  gramosPorTanda Float
+
+  producto Producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  insumo   Insumo   @relation(fields: [insumoId], references: [id], onDelete: Cascade)
+
+  @@id([productoId, insumoId])
+  @@map("receta_items")
+}
+
+/// Stock del día por insumo, tal como se captura en la pestaña Bodega (en gramos).
+model BodegaInsumo {
+  insumoId       String   @id
+  ingresos       Float    @default(0)
+  bodega         Float    @default(0)
+  actualizadoEn  DateTime @updatedAt
+
+  insumo Insumo @relation(fields: [insumoId], references: [id], onDelete: Cascade)
+
+  @@map("bodega_insumos")
+}
+
+/// Cuenta de acceso. rol: "ADMIN" (edita recetas e insumos) u "OPERADOR" (solo produce).
+model Usuario {
+  id           String   @id @default(cuid())
+  usuario      String   @unique
+  nombre       String
+  passwordHash String
+  rol          String   @default("OPERADOR")
+  activo       Boolean  @default(true)
+  creadoEn     DateTime @default(now())
+
+  @@map("usuarios")
+}
+
+/// Snapshot de una producción calculada y guardada en el historial.
+model Produccion {
+  id                 String   @id @default(cuid())
+  fecha              String
+  hora               String
+  costoTotal         Float
+  algunCostoConocido Boolean
+  productos          Json
+  consumo            Json
+  balance            Json
+  creadoEn           DateTime @default(now())
+  /// Cierre de día que ya descontó esta producción de la bodega (null = pendiente).
+  cierreId           String?
+
+  cierre CierreBodega? @relation(fields: [cierreId], references: [id], onDelete: SetNull)
+
+  @@map("producciones")
+}
+
+/// Paso de un día al siguiente: lo que quedó en bodega pasa a ser la bodega inicial.
+/// Guarda la bodega anterior para poder deshacerlo.
+model CierreBodega {
+  id       String   @id @default(cuid())
+  creadoEn DateTime @default(now())
+  anterior Json
+
+  producciones Produccion[]
+
+  @@map("cierres_bodega")
+}
